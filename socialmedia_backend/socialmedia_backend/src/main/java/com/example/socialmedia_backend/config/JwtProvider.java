@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class JwtProvider {
     static SecretKey key = Keys.hmacShaKeyFor(JwtValues.key.getBytes());
-    public static String generateTokenFromJwt(Authentication authentication){
+    public static String generateToken(Authentication authentication){
 
         String jwt = Jwts.builder().setIssuer("Adithya").setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime()+864000))

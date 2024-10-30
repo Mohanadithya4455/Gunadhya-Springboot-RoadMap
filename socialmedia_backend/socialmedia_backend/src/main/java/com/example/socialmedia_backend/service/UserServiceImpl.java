@@ -1,5 +1,6 @@
 package com.example.socialmedia_backend.service;
 
+import com.example.socialmedia_backend.config.JwtProvider;
 import com.example.socialmedia_backend.models.User;
 import com.example.socialmedia_backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,16 +13,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService{
     @Autowired
     UserRepository userRepository;
-    @Override
-    public User saveUser(User user) {
-        User user1 = new User();
-        user1.setId(user.getId());
-        user1.setFirstName(user.getFirstName());
-        user1.setLastName(user.getLastName());
-        user1.setEmail(user.getEmail());
-        user1.setPassword(user.getPassword());
-        return userRepository.save(user1);
-    }
+
 
     @Override
     public List<User> getAllUsers() {
@@ -81,5 +73,12 @@ public class UserServiceImpl implements UserService{
     public List<User> searchUser(String name) {
         List<User> users = userRepository.searchUser(name);
         return users;
+    }
+
+    @Override
+    public User getUserByToken(String jwt) {
+        String email = JwtProvider.getMailFromToken(jwt);
+        User user = userRepository.findByEmail(email);
+        return user;
     }
 }

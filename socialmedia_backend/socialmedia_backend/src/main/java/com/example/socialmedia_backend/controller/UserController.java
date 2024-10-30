@@ -14,37 +14,41 @@ public class UserController {
 
     @Autowired
     UserServiceImpl userServiceImpl;
-    @PostMapping("/save")
-    public User saveUser(@RequestBody User user){
-        return userServiceImpl.saveUser(user);
-    }
+
     @GetMapping("/api/getall")
-    public List<User> getAllUsers(){
+    public List<User> getAllUsers(@RequestHeader("Authorization") String jwt){
+        User user = userServiceImpl.getUserByToken(jwt);
         return userServiceImpl.getAllUsers();
     }
     @GetMapping("/api/get/{id}")
-    public User getById(@PathVariable("id") Integer id) throws Exception {
+    public User getById(@PathVariable("id") Integer id,@RequestHeader("Authorization") String jwt) throws Exception {
+        User user = userServiceImpl.getUserByToken(jwt);
         return userServiceImpl.findUserById(id);
     }
-    @PutMapping("/api/update/{id}")
-    public User updateUser(@PathVariable("id") Integer id,@RequestBody User user) throws Exception {
-       return userServiceImpl.updateUser(id, user);
+    @PutMapping("/api/update")
+    public User updateUser(@RequestBody User user, @RequestHeader("Authorization") String jwt) throws Exception {
+        User user1 = userServiceImpl.getUserByToken(jwt);
+       return userServiceImpl.updateUser(user1.getId(),user);
     }
-    @DeleteMapping("/api/delete/{id}")
-    public String deleteUser(@PathVariable("id") Integer id) throws Exception {
-        return userServiceImpl.deleteUser(id);
+    @DeleteMapping("/api/delete")
+    public String deleteUser(@RequestHeader("Authorization") String jwt) throws Exception {
+        User user1 = userServiceImpl.getUserByToken(jwt);
+        return userServiceImpl.deleteUser(user1.getId());
     }
-    @PutMapping("/apifollow/{id1}/{id2}")
-    public User followUser(@PathVariable("id1") Integer id1,@PathVariable("id2") Integer id2) throws Exception {
-        return userServiceImpl.followUser(id1,id2);
+    @PutMapping("/api/follow/{id2}")
+    public User followUser(@RequestHeader("Authorization") String jwt,@PathVariable("id2") Integer id2) throws Exception {
+        User user1 = userServiceImpl.getUserByToken(jwt);
+        return userServiceImpl.followUser(user1.getId(),id2);
     }
 
     @GetMapping("/api/search/{mailId}")
-    public User getByMail(@PathVariable("mailId") String mail){
+    public User getByMail(@PathVariable("mailId") String mail,@RequestHeader("Authorization") String jwt){
+        User user1 = userServiceImpl.getUserByToken(jwt);
         return userServiceImpl.searchByEmail(mail);
     }
     @GetMapping("/api/searchUser")
-    public List<User> searchUser(@RequestParam("query") String name){
+    public List<User> searchUser(@RequestParam("query") String name,@RequestHeader("Authorization") String jwt){
+        User user1 = userServiceImpl.getUserByToken(jwt);
         return userServiceImpl.searchUser(name);
     }
 }
