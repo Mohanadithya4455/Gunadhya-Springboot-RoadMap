@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ChatServiceImpl implements ChatService{
@@ -34,4 +35,15 @@ public class ChatServiceImpl implements ChatService{
     public List<Chat> findUserChats(Integer id) {
           return chatRepository.findByUsersId(id);
     }
+
+    @Override
+    public Chat findById(Integer chatId) throws Exception {
+        Optional<Chat> chat = chatRepository.findById(chatId);
+        if(chat.isPresent()){
+            return chat.get();
+        }
+        throw  new Exception("Chat not found with this Id: "+chatId);
+    }
+
+
 }

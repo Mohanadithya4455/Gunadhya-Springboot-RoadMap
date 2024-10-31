@@ -23,6 +23,7 @@ public class Chat {
          private LocalDateTime time;
          @ManyToMany
          private List<User> users = new ArrayList<>();
-
+          @OneToMany(mappedBy = "chat")
+         List<Message> messages = new ArrayList<>();
 
 }

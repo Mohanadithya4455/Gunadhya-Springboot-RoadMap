@@ -28,5 +28,9 @@ public class ChatController {
         User user = userService.getUserByToken(jwt);
         return chatService.findUserChats(user.getId());
     }
+    @GetMapping("/getById/{chatId}")
+    public Chat findByID(@PathVariable("chatId") Integer chatId) throws Exception {
+        return chatService.findById(chatId);
+    }
 
 }
